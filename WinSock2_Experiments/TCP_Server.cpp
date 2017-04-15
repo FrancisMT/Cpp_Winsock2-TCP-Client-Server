@@ -4,19 +4,26 @@
 
 
 TCP_Server::TCP_Server(int Port)
-	: PortNumber(Port)
+	: ServerIP("127.0.0.1")
+	, ServerPort(Port)
 	, ServerSocket(0)
 	, ClientSocket(0) {}
+
+TCP_Server::~TCP_Server() {
+	std::cout << "Terminating Server" << std::endl;
+	closesocket(ServerSocket);
+	WSACleanup();
+}
 
 
 int TCP_Server::StartListening() {
 
 	WSADATA WSAData;
-	WORD WordVersionRequested = MAKEWORD(2, 2);
+	WORD DllVersionRequested = MAKEWORD(2, 2);
 	//WSAStartup() initializes the program to call winsock2.dll
-	int WSAError = WSAStartup(WordVersionRequested, &WSAData);
+	int WSAInitResult = WSAStartup(DllVersionRequested, &WSAData);
 
-	if (WSAError != 0) {
+	if (WSAInitResult != 0) {
 		std::cout << "[SERVER] Winsock.dll not found" << std::endl;
 
 		//WSACleanup() terminates use of the Winsock 2 DLL
@@ -35,18 +42,16 @@ int TCP_Server::StartListening() {
 	}
 
 	//SOCKADDR_IN struct is used by winsock to specify an endpoint address to which the socket connects
-	char* IPAddress("127.0.0.1");
-
 	sockaddr_in OutgoingConnection;
 	int OutgoingConnectionSize = sizeof(OutgoingConnection);
-	OutgoingConnection.sin_family = AF_INET;
-	OutgoingConnection.sin_port = htons(PortNumber);
-	OutgoingConnection.sin_addr.s_addr = inet_addr(IPAddress);
+	OutgoingConnection.sin_family = AF_INET;					//AF is Address Family. The AF we want to use is Internet (IPv4 addresses)
+	OutgoingConnection.sin_port = htons(ServerPort);
+	OutgoingConnection.sin_addr.s_addr = inet_addr(ServerIP);
 
 	//bind() links the ServerSocket with OutgoingConnection sockaddr_in struct.
 	auto BindResult = bind(ServerSocket, reinterpret_cast<sockaddr*>(&OutgoingConnection), OutgoingConnectionSize);
 	if (BindResult == SOCKET_ERROR) {
-		std::cout << "[SERVER] Error binding ServerSocket to port number: " << PortNumber << std::endl;
+		std::cout << "[SERVER] Error binding ServerSocket to port number: " << ServerPort << std::endl;
 		WSACleanup();
 	}
 
@@ -56,17 +61,16 @@ int TCP_Server::StartListening() {
 		std::cout << "[SERVER] Error listening on socket -> " << WSAGetLastError() << std::endl;
 	}
 	else {
-		std::cout << "[SERVER] Waiting for connections @ " << IPAddress << ":" << PortNumber << std::endl;
-	}
-	std::cout << "[SERVER] Waiting for a client to connect ..." << std::endl;
+		std::cout << "[SERVER] Waiting for connections @ " << ServerIP << ":" << ServerPort << std::endl;
 
-	//Accept connections
-	AcceptConnections();
+		//Accept connections
+		AcceptConnections();
+	}
 	return 0;
 }
 
 
-int TCP_Server::AcceptConnections() {
+void TCP_Server::AcceptConnections() {
 
 	sockaddr_in IncomingConnection;
 	int IncomingConnectionSize = sizeof(IncomingConnection);
@@ -95,15 +99,10 @@ int TCP_Server::AcceptConnections() {
 		else if (!strcmp(ProcessedClientMessage, "Ping")) {
 			std::cout << "[SEVER] Message received from " << ClientIP << ":" << ClientPort << " -> " << ProcessedClientMessage << std::endl;
 
-			auto MessageToClient("Pong");
+			auto MessageToClient("Pong_");
 			send(ClientSocket, MessageToClient, sizeof(MessageToClient), 0);
 		}
-
 		closesocket(ClientSocket);
 	}
-
-	closesocket(ServerSocket);
-	WSACleanup();
-
-	return 0;
+	this->~TCP_Server();
 }

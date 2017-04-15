@@ -6,15 +6,16 @@ class TCP_Server
 {
 public:
 	explicit TCP_Server(int Port);
-	~TCP_Server() = default;
+	~TCP_Server();
 	int StartListening();
 
 protected:
-	int PortNumber;
+	const char* ServerIP;
+	int ServerPort;
 	SOCKET ServerSocket;
 	SOCKET ClientSocket;
 
 private:
-	int AcceptConnections();
+	void AcceptConnections();
 };
 

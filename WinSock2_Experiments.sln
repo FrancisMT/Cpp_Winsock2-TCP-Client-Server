@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinSock2_Experiments", "WinSock2_Experiments\WinSock2_Experiments.vcxproj", "{4487B11E-3318-4E72-8FE5-75C6575A4F43}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCP_Server", "WinSock2_Experiments\WinSock2_Experiments.vcxproj", "{4487B11E-3318-4E72-8FE5-75C6575A4F43}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCP_Client", "TCP_Client\TCP_Client.vcxproj", "{BDE274ED-AC0B-4A11-A09A-C6D405439F70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{4487B11E-3318-4E72-8FE5-75C6575A4F43}.Release|x64.Build.0 = Release|x64
 		{4487B11E-3318-4E72-8FE5-75C6575A4F43}.Release|x86.ActiveCfg = Release|Win32
 		{4487B11E-3318-4E72-8FE5-75C6575A4F43}.Release|x86.Build.0 = Release|Win32
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Debug|x64.ActiveCfg = Debug|x64
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Debug|x64.Build.0 = Debug|x64
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Debug|x86.ActiveCfg = Debug|Win32
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Debug|x86.Build.0 = Debug|Win32
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Release|x64.ActiveCfg = Release|x64
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Release|x64.Build.0 = Release|x64
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Release|x86.ActiveCfg = Release|Win32
+		{BDE274ED-AC0B-4A11-A09A-C6D405439F70}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
