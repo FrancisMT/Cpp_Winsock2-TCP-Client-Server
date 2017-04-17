@@ -1,0 +1,11 @@
+﻿  TCP_Server.cpp
+d:\repositories\winsock2_experiments\tcp_server\tcp_server.cpp(49): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock2.h(1830): note: see declaration of 'inet_addr'
+d:\repositories\winsock2_experiments\tcp_server\tcp_server.cpp(84): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\winsock2.h(1848): note: see declaration of 'inet_ntoa'
+d:\repositories\winsock2_experiments\tcp_server\tcp_server.cpp(94): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\string.h(439): note: see declaration of 'strtok'
+  ServerMain.cpp
+  Generating Code...
+  TCP_Server.vcxproj -> D:\Repositories\Winsock2_Experiments\x64\Debug\TCP_Server.exe
+  TCP_Server.vcxproj -> D:\Repositories\Winsock2_Experiments\x64\Debug\TCP_Server.pdb (Partial PDB)
