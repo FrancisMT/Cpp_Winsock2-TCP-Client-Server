@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TCP_Server.h"
 #include <iostream>
+#include <thread>
 
 
 TCP_Server::TCP_Server(int Port)
@@ -75,34 +76,43 @@ void TCP_Server::AcceptConnections() {
 	sockaddr_in IncomingConnection;
 	int IncomingConnectionSize = sizeof(IncomingConnection);
 
-	//Infinitly echo the client's IP
-	while (true) {
+	//Accept connection to client
+	while ((ClientSocket = accept(ServerSocket, /*out*/reinterpret_cast<sockaddr*>(&IncomingConnection), /*out*/&IncomingConnectionSize))) {
 
-		//Accept connection to client
-		ClientSocket = accept(ServerSocket, /*out*/reinterpret_cast<sockaddr*>(&IncomingConnection), /*out*/&IncomingConnectionSize);
+		std::thread ClientThread([&]() mutable->void
+		{
+			auto ClientIP = inet_ntoa(IncomingConnection.sin_addr);
+			auto ClientPort = IncomingConnection.sin_port;
+			std::cout << "[SERVER] Received connection from " << ClientIP << ":" << ClientPort << " on thread: " << std::this_thread::get_id() << std::endl;
 
-		auto ClientIP = inet_ntoa(IncomingConnection.sin_addr);
-		auto ClientPort = IncomingConnection.sin_port;
-		std::cout << "[SERVER] Received connection from: " << ClientIP << ":" << ClientPort << std::endl;
+			//Read message from client
+			const auto BufferSize(100);
+			const auto MsgTerminationChar("_");
+			char ClientMessage[BufferSize];
 
-		//Read message from client
-		const auto BufferSize(100);
-		const auto MsgTerminationChar("_");
-		char ClientMessage[BufferSize];
+			auto ReceptionStatus = recv(ClientSocket, ClientMessage, BufferSize, 0);
+			auto ProcessedClientMessage = strtok(ClientMessage, MsgTerminationChar);
 
-		auto ReceptionStatus = recv(ClientSocket, ClientMessage, BufferSize, 0);
-		auto ProcessedClientMessage = strtok(ClientMessage, MsgTerminationChar);
+			if (ReceptionStatus == SOCKET_ERROR) {
+				std::cout << "[SEVER] Error receiving message from " << ClientIP << ":" << ClientPort << " -> " << WSAGetLastError() << std::endl;
+			}
+			else if (!strcmp(ProcessedClientMessage, "Ping")) {
+				std::cout << "[SERVER] Message received from " << ClientIP << ":" << ClientPort << " -> " << ProcessedClientMessage << std::endl;
 
-		if (ReceptionStatus == SOCKET_ERROR) {
-			std::cout << "[SEVER] Error receiving message from " << ClientIP << ":" << ClientPort << " -> " << WSAGetLastError() << std::endl;
+				auto MessageToClient("Pong_");
+				send(ClientSocket, MessageToClient, sizeof(MessageToClient), 0);
+			}
+
+			closesocket(ClientSocket);
+		});
+		
+		if (ClientThread.joinable()) {
+			ClientThread.join();
+			
+			//Use only if we want to run each thread as a daemon process
+			//ClientThread.detach();
 		}
-		else if (!strcmp(ProcessedClientMessage, "Ping")) {
-			std::cout << "[SEVER] Message received from " << ClientIP << ":" << ClientPort << " -> " << ProcessedClientMessage << std::endl;
 
-			auto MessageToClient("Pong_");
-			send(ClientSocket, MessageToClient, sizeof(MessageToClient), 0);
-		}
-		closesocket(ClientSocket);
 	}
 	this->~TCP_Server();
 }

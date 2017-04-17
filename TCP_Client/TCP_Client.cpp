@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-TCP_Client::TCP_Client(int Port, char* IP)
+TCP_Client::TCP_Client(const int Port,const char* IP)
 	: ServerPort(Port)
 	, ServerIP(IP) {
 

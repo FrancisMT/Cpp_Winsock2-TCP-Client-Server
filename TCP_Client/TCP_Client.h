@@ -4,13 +4,13 @@
 class TCP_Client
 {
 public:
-	TCP_Client(int Port, char* IP);
+	TCP_Client(const int Port, const char* IP);
 	~TCP_Client();
 
 	void ManageCommunication(char *DataToSend) const;
 
 protected:
-	int ServerPort;
-	char *ServerIP;
+	const int ServerPort;
+	const char *ServerIP;
 	SOCKET ClientSocket;
 };

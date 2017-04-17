@@ -3,14 +3,15 @@
 
 #include "stdafx.h"
 #include "TCP_Client.h"
+#include <thread>
 
 int main()
 {
-	int ServerPort(4242);
-	char* ServerIP("127.0.0.1");
+	const int ServerPort(4242);
+	const char* ServerIP("127.0.0.1");
 
-	TCP_Client NewTCPClient(ServerPort, ServerIP);
+	TCP_Client TCPClientOne(ServerPort, ServerIP);
 
-    return 0;
+	return 0;
 }
 

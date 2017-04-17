@@ -9,8 +9,8 @@ int main()
 {
 	int ServerPortNumber = 4242;
 	TCP_Server TCPServer(ServerPortNumber);
-
 	TCPServer.StartListening();
+	
 	return 0;
 }
 
